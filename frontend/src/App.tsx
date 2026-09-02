@@ -1,10 +1,36 @@
 import { useState } from "react";
-import "./App.css";
+
 import UserTable from "./components/UserTable";
 import UserModal from "./components/UserModal";
 
+import "./App.css";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedUser, setSelectedUser] =
+    useState<User | null>(null);
+
+  const handleAddUser = () => {
+    setSelectedUser(null);
+    setShowModal(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedUser(null);
+  };
 
   return (
     <div className="app">
@@ -15,8 +41,9 @@ function App() {
         </div>
 
         <button
+          type="button"
           className="add-user-button"
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAddUser}
         >
           + Add User
         </button>
@@ -26,16 +53,20 @@ function App() {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search users..."
             className="search-input"
+            placeholder="Search users..."
           />
         </div>
 
-        <UserTable />
+        <UserTable onEdit={handleEditUser} />
       </main>
 
-      {isModalOpen && (
-        <UserModal onClose={() => setIsModalOpen(false)} />
+      {showModal && (
+        <UserModal
+          user={selectedUser}
+          onClose={handleCloseModal}
+          onSuccess={handleCloseModal}
+        />
       )}
     </div>
   );

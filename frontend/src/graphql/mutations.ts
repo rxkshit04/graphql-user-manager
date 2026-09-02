@@ -11,11 +11,13 @@ export const CREATE_USER = gql`
       email: $email
       role: $role
     ) {
-      id
-      name
-      email
-      role
-      createdAt
+      user {
+        id
+        name
+        email
+        role
+        createdAt
+      }
     }
   }
 `;
@@ -33,17 +35,21 @@ export const UPDATE_USER = gql`
       email: $email
       role: $role
     ) {
-      id
-      name
-      email
-      role
-      createdAt
+      user {
+        id
+        name
+        email
+        role
+        createdAt
+      }
     }
   }
 `;
 
 export const DELETE_USER = gql`
   mutation DeleteUser($id: ID!) {
-    deleteUser(id: $id)
+    deleteUser(id: $id) {
+      success
+    }
   }
 `;
